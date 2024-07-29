@@ -9,7 +9,7 @@ val inventory1 = Map(
 
 val inventory2 = Map(
   102 -> ("Banana", 5, 20.00),
-  101 -> ("Apple", 3, 25.00),
+  101 -> ("Apple", 8, 25.00),
   105 -> ("Grapes", 4, 10.00)
 )
 
@@ -51,19 +51,12 @@ val inventory2 = Map(
 
     } else if (choice == 4) {
       var mergedInventory = inventory1
-      mergedInventory.foreach { (key1, value1) =>
-        {
-          inventory2.foreach { (key2, value2) =>
-            {
-              if (key1 == key2) {
-                println(s"key1: ${key1}, key2: ${key2}")
-                mergedInventory += (key1 -> (value1._1, (value1._2+value2._2), math
-                  .max(value1._3, value2._3)))
-              } else {
-                mergedInventory += (key2 -> value2)
-              }
-            }
-          }
+      mergedInventory.foreach { (key1, value1) =>{
+        if(inventory2.contains(key1)){
+            val value2 = inventory2(key1)
+
+             mergedInventory += (key1 -> (value1._1, (value1._2+value2._2), math.max(value1._3, value2._3)))
+        }
         }
       }
       println("\nInventory after merged: ")
