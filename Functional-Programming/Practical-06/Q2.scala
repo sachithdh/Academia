@@ -1,7 +1,6 @@
 import scala.io.StdIn._
-import scala.annotation.retains
 
-def validateInput(name: String, marks: Int, totalMarks: Int): (Boolean, String) = {
+def validateInput(name: String, marks: Int, totalMarks: Int): (Boolean, String, Int) = {
     var isValid: Boolean = true
     var errorMessage: String = ""
 
@@ -9,21 +8,25 @@ def validateInput(name: String, marks: Int, totalMarks: Int): (Boolean, String) 
         isValid = false
         errorMessage = "Error: Name cannot be empty.\n"
 
-        return (isValid, errorMessage)
+        return (isValid, errorMessage, marks)
     }
     if (marks < 0){
-        isValid = false
-        errorMessage = "Error: Marks cannot be negative.\n"
-        return (isValid, errorMessage)
+        if (marks >= -10){
+            return (isValid, errorMessage, 0)
+        } else {
+            isValid = false
+            errorMessage = "Error: Invalid marks\n"
+            return (isValid, errorMessage, marks)
+        }
     }
     
     if(marks > totalMarks){
         isValid = false
         errorMessage = s"Error: Marks cannot be greater than ${totalMarks}.\n"
-        return (isValid, errorMessage)
+        return (isValid, errorMessage, marks)
     }
 
-    return (isValid, errorMessage)
+    return (isValid, errorMessage, marks)
 }
 
 def getStudentInfoWithRetry() ={
@@ -32,23 +35,24 @@ def getStudentInfoWithRetry() ={
 
 def getStudentInfo(): Option[(String, Int, Int, Double, Char)] ={
     val name: String = readLine("Student name: ").trim
-    val marks: Int = readLine("Marks: ").toInt
+    var marks: Int = readLine("Marks: ").toInt
     val totalMarks: Int = readLine("Total possible marks: ").toInt
 
-    val (isValid, errorMessage) = validateInput(name, marks, totalMarks)
+    val (isValid, errorMessage, finalMarks) = validateInput(name, marks, totalMarks)
     var percentage: Double = 0
     var grade: Char = ' '
     
     isValid match{
         case true => {
-            percentage = (marks.toDouble / totalMarks) * 100
+            var 
+            percentage = (finalMarks.toDouble / totalMarks) * 100
             percentage match {
                 case x if(x >= 90) => grade = 'A'
                 case x if(x >= 75) => grade = 'B'
                 case x if(x >= 50) => grade = 'C'
                 case _ => grade = 'D'
             }
-             Some((name, marks, totalMarks, percentage, grade))
+             Some((name, finalMarks, totalMarks, percentage, grade))
         }
         case false => {
             println(errorMessage)
