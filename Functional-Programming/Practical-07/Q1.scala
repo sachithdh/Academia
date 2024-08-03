@@ -5,6 +5,8 @@ def filterEvenNumbers(intList: List[Int]): List[Int] ={
 @main def Q1(): Unit ={
     val intList: List[Int] = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
     val evenList = filterEvenNumbers(intList)
-    evenList.foreach(println)
+    println(s"Input List: $intList")
+    println(s"Output List: $evenList")
+    // evenList.foreach(println)
     
 }
