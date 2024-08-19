@@ -31,7 +31,7 @@ def cipher(message: String, key: Int, mode: (String, Int) => String): String ={
 }
 
 @main def Q1(): Unit = {
-    println(cipher("HELLO", 2, encrypt))
+    // println(cipher("HELLO", 2, encrypt))
 
     print("\nEnter Your Message: ")
     val message = readLine()
