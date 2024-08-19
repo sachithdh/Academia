@@ -20,3 +20,6 @@
     println(formatNames(name3, toLower))
     println(name4.substring(0, 5) + formatNames(name4.substring(5), toUpper))
 }
+
+
+
