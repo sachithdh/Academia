@@ -11,3 +11,5 @@ import scala.io.StdIn._
     }
     println(flag(num))
 }
+
+
