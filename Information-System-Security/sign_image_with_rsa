@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# Function to show help message
+function display_help() {
+    echo
+    echo "Usage: $0 [options]"
+    echo
+    echo "Script to sign your image using RSA key."
+    echo 
+    echo "Options:"
+    echo "  -h, --help         Show this help message and exit"
+    echo "  -f, --file         Path to your image"
+    echo "  -v, --verify       Verify the signature"
+    echo
+    echo "Examples:"
+    echo "  $0 -f /path/to/your/image"
+    echo "  $0 -v /path/to/your/image"
+    echo
+    exit 0
+}
+
+# Verify the signature
+function verify(){
+    openssl dgst -sha256 -verify public_key.pem -signature $1.sig $1
+}
+
+function file_not_found_error(){
+    echo "Error: File '$1' does not exists.">&2
+    exit 1
+}
+
+function sign_image(){
+    openssl genrsa -out private_key.pem 2048
+
+    openssl rsa -in private_key.pem -pubout -out public_key.pem
+
+    openssl dgst -sha256 -sign private_key.pem -out $1.sig $1
+}
+
+for arg in "$@"; do
+    case $arg in
+        -h|--help)
+            display_help
+            ;;
+        -f|--file)
+            file_path="$2"
+            if [ ! -f "$file_path" ]; then
+                file_not_found_error "$file_path"
+            else
+                sign_image "$file_path"
+            fi
+            ;;
+        -v|--verify)
+            verify "$2"
+            ;;
+    esac
+done
+
+
+
+
